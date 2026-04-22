@@ -41,4 +41,10 @@ export const InventoryProvider = ({ children }) => {
 };
 
 // Власний хук, щоб було зручно користуватися контекстом
-export const useInventory = () => useContext(InventoryContext);
+export const useInventory = () => {useContext(InventoryContext)
+    const context = useContext(InventoryContext);
+    if (!context) {
+    console.error("useInventory must be used within an InventoryProvider");
+  }
+  return context;
+};

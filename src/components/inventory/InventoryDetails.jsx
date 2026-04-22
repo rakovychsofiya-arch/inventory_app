@@ -1,6 +1,5 @@
-import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useInventory } from '../store/InventoryContext';
+import { useInventory } from '../../store/InventoryContext';
 
 const AdminInventoryDetails = () => {
   const { id } = useParams(); // Отримуємо ID з URL
