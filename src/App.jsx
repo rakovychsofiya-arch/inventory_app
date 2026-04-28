@@ -3,7 +3,17 @@ import AdminInventory from './pages/AdminInventory';
 import AdminInventoryCreate from './pages/AdminInventoryCreate';
 import AdminInventoryEdit from './pages/AdminInventoryEdit';
 import AdminInventoryDetails from './pages/AdminInventoryDetails';
+import { Link } from 'react-router-dom';
+// src/components/Navbar.jsx
+import { Link } from 'react-router-dom';
 
+const Navbar = () => (
+  <nav style={{ padding: '10px', background: '#333', color: '#fff', display: 'flex', gap: '20px' }}>
+    <Link to="/" style={{ color: 'white' }}>Галерея (User)</Link>
+    <Link to="/favorites" style={{ color: 'white' }}>Улюблені</Link>
+    <Link to="/admin" style={{ color: 'white', marginLeft: 'auto' }}>Адмін-панель</Link>
+  </nav>
+);
 function App() {
   return (
     <Router>

@@ -1,51 +1,55 @@
-import { useParams, useNavigate } from 'react-router-dom';
-import { useInventory } from '../../store/InventoryContext';
 
-const AdminInventoryDetails = () => {
-  const { id } = useParams(); // Отримуємо ID з URL
-  const navigate = useNavigate();
-  const { items } = useInventory(); // Беремо список товарів із нашого "сховища"
-
-  // Шукаємо конкретний товар за ID
-  const item = items.find(i => i.id === parseInt(id));
-
-  if (!item) {
-    return (
-      <div style={{ padding: '20px' }}>
-        <h2>Товар не знайдено</h2>
-        <button onClick={() => navigate('/admin')}>Повернутися до списку</button>
-      </div>
-    );
-  }
+const InventoryDetails = ({ item }) => {
+  // Якщо дані ще не прийшли, нічого не малюємо або показуємо заглушку
+  if (!item) return null;
 
   return (
-    <div style={{ padding: '20px', border: '1px solid #ccc', borderRadius: '8px', maxWidth: '600px' }}>
-      <button onClick={() => navigate('/admin')}>← Назад до списку</button>
+    <div className="inventory-details-card" style={{ lineHeight: '1.6' }}>
+      <h1 style={{ color: '#2c3e50', marginBottom: '20px' }}>
+        {item.inventory_name}
+      </h1>
       
-      <h1 style={{ marginTop: '20px' }}>{item.inventory_name}</h1>
-      
-      <div style={{ margin: '20px 0' }}>
+      <div style={{ 
+        textAlign: 'center', 
+        marginBottom: '25px', 
+        background: '#f9f9f9', 
+        padding: '15px', 
+        borderRadius: '12px',
+        border: '1px solid #eee'
+      }}>
         {item.inventory_image ? (
           <img 
             src={item.inventory_image} 
             alt={item.inventory_name} 
-            style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }} 
+            style={{ width: '100%', maxHeight: '450px', objectFit: 'contain', borderRadius: '8px' }} 
           />
         ) : (
-          <div style={{ width: '100%', height: '200px', background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            Фото відсутнє
+          <div style={{ width: '100%', height: '250px', background: '#e0e0e0', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '8px' }}>
+            <span style={{ color: '#7f8c8d' }}>Зображення відсутнє</span>
           </div>
         )}
       </div>
 
-      <h3>Опис:</h3>
-      <p>{item.description || "Опис відсутній"}</p>
+      <div className="inventory-info">
+        <h3 style={{ borderBottom: '2px solid #6c5ce7', display: 'inline-block', paddingBottom: '5px' }}>
+          Опис товару:
+        </h3>
+        <p style={{ fontSize: '18px', color: '#34495e', marginTop: '10px' }}>
+          {item.description || "Для цього товару опис ще не додано."}
+        </p>
+      </div>
 
-      <div style={{ marginTop: '30px', borderTop: '1px solid #eee', paddingTop: '10px' }}>
-        <small>ID товару: {item.id}</small>
+      <div style={{ 
+        marginTop: '40px', 
+        paddingTop: '15px', 
+        borderTop: '1px dotted #ccc', 
+        color: '#95a5a6', 
+        fontSize: '14px' 
+      }}>
+        <p>Системний ідентифікатор: <strong>{item.id}</strong></p>
       </div>
     </div>
   );
 };
 
-export default AdminInventoryDetails;
+export default InventoryDetails;

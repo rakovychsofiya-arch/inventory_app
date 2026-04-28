@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import multer from 'multer'; // Для роботи з файлами
-import path from 'path';
+
 
 const app = express();
 const upload = multer({ dest: 'uploads/' }); // Папка, куди будуть падати фото
@@ -45,6 +45,17 @@ app.put('/api/inventory/:id', (req, res) => {
     res.json(inventory[index]);
   } else {
     res.status(404).json({ message: "Не знайдено" });
+  }
+});
+// Отримати ОДИН предмет за ID
+app.get('/api/inventory/:id', (req, res) => {
+  const { id } = req.params;
+  const item = inventory.find(item => String(item.id) === String(id));
+  
+  if (item) {
+    res.json(item);
+  } else {
+    res.status(404).json({ message: "Предмет не знайдено" });
   }
 });
 

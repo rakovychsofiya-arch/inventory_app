@@ -6,31 +6,41 @@ import { useNavigate } from 'react-router-dom';
 const InventoryForm = ({ mode, itemId }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState(null);
+  
   const navigate = useNavigate();
+const [image, setImage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
 
-    // Створюємо "коробку" FormData для передачі файлу та тексту [cite: 73, 96]
-    const formData = new FormData();
-    formData.append('inventory_name', name);
-    formData.append('description', description);
-    if (image) {
-      formData.append('inventory_image', image); // Додаємо файл фото [cite: 69]
-    }
+const handleFileChange = (e) => {
+  const file = e.target.files[0];
+  if (file) {
+    // Зберігаємо шлях до папки public/images + назва файлу
+    const fileName = `/images/${file.name}`;
+    setImage(fileName);
+    console.log("Шлях до картинки:", fileName);
+  }
+};
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      if (mode === 'create') {
-        await inventoryApi.create(formData);
-      } else {
-        // Логіка для редагування (напишемо згодом)
-      }
-      navigate('/admin'); // Після успіху повертаємось до списку [cite: 101]
-    } catch (error) {
-      alert("Помилка при збереженні!");
-    }
+  const itemData = {
+    inventory_name: name,
+    description: description,
+    inventory_image: image // Тут тепер буде рядок, наприклад "/images/pitbull.jpg"
   };
+
+  try {
+    if (mode === 'edit') {
+      await inventoryApi.update(itemId, itemData);
+    } else {
+      await inventoryApi.create(itemData);
+    }
+    navigate('/admin');
+  } catch (error) {
+    console.error("Помилка:", error);
+    alert("Не вдалося зберегти дані");
+  }
+};
 
   return (
     <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' }}>
@@ -46,11 +56,11 @@ const InventoryForm = ({ mode, itemId }) => {
         value={description} 
         onChange={(e) => setDescription(e.target.value)} 
       />
-      <input 
-        type="file" 
-        accept="image/*" 
-        onChange={(e) => setImage(e.target.files[0])} // Беремо перший вибраний файл [cite: 97]
-      />
+     <input 
+  type="file" 
+  accept="image/*" 
+  onChange={handleFileChange} // Використовуємо твою правильну функцію
+/>
       <button type="submit">
         {mode === 'create' ? 'Додати' : 'Зберегти зміни'}
       </button>
